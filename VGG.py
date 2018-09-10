@@ -42,6 +42,5 @@ def VGG16(x, n_class, is_pretrain=True):
         x = tools.FC_layer('fc7', x, out_nodes=4096)
         with tf.name_scope('batch_norm2'):
             x = tools.batch_norm(x)
-        #x = tools.FC_layer('fc8', x, out_nodes=n_class)
-        x = tools.Last_layer('fc8', x, out_nodes = n_class)
+        x = tools.FC_layer('fc8', x, out_nodes=n_class)
         return x
