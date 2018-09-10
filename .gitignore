@@ -2,3 +2,4 @@
 __pycache__/
 logs2/
 VGG16_pretrain/*
+dataset/*
