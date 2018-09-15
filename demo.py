@@ -15,7 +15,7 @@ if __name__=='__main__':
     image = tf.image.per_image_standardization(image)
     image = tf.cast(image, tf.float32)
     image = tf.reshape(image,(-1,config.IMG_W, config.IMG_H,3))
-    logits_op = VGG.VGG16(image, config.N_CLASSES, False)
+    logits_op = VGG.VGG16(image, config.N_CLASSES, True, False)
     prob_op = tf.nn.softmax(logits_op)
     #input image
     name = os.path.join(config.dataPath,'dog.jpg')

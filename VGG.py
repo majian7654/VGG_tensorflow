@@ -3,7 +3,7 @@ import tensorflow as tf
 import tools
 
 
-def VGG16(x, n_class, is_pretrain=True):
+def VGG16(x, n_class, is_pretrain=True, is_train=True):
 
     # using the name scope, the tensorboard maybe look better
     with tf.name_scope('VGG16'):
@@ -36,11 +36,11 @@ def VGG16(x, n_class, is_pretrain=True):
         with tf.name_scope('pool5'):
             x = tools.pool('pool5', x, ksize=[1, 2, 2, 1], stride=[1, 2, 2, 1], is_max_pool=True)
 
-        x = tools.FC_layer('fc6', x, out_nodes=4096)
+        x = tools.FC_layer('fc6', x, out_nodes=4096, is_train=is_train)
 #        with tf.name_scope('batch_norma1'):
 #            x = tools.batch_norm(x)     # batch norm can avoid overfit, more efficient than dropout
-        x = tools.FC_layer('fc7', x, out_nodes=4096)
+        x = tools.FC_layer('fc7', x, out_nodes=4096, is_train=is_train)
 #        with tf.name_scope('batch_norm2'):
 #            x = tools.batch_norm(x)
-        x = tools.FC_layer('fc8', x, out_nodes=n_class)
+        x = tools.FC_layer('fc8', x, out_nodes=n_class, is_train=is_train)
         return x

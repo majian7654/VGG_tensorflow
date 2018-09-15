@@ -1,4 +1,4 @@
-# DATA:
+#DATA:
 # 1. cifar10(binary version):https://www.cs.toronto.edu/~kriz/cifar.html
 # 2. pratrained weights (vgg16.npy):https://mega.nz/#!YU1FWJrA!O1ywiCS2IiOlUCtCpI6HTJOMrneN-Qdv3ywQP5poecM
 
@@ -25,7 +25,7 @@ N_CLASSES = config.N_CLASSES
 BATCH_SIZE = config.BATCH_SIZE
 learning_rate = config.lr
 MAX_STEP = config.MAX_STEP
-IS_TRAIN = True
+IS_PRETRAIN = True
 
 
 def train():
@@ -46,7 +46,7 @@ def train():
                                                                    batch_size=BATCH_SIZE,
                                                                    shuffle=False)
 
-    logits = VGG.VGG16(train_image_batch, N_CLASSES, IS_TRAIN)
+    logits = VGG.VGG16(train_image_batch, N_CLASSES, IS_PRETRAIN)
     loss = tools.loss(logits, train_label_batch)
     accuracy = tools.accuracy(logits, train_label_batch)
     my_global_step = tf.Variable(0, trainable=False, name='global_step')
@@ -128,7 +128,7 @@ def evaluate():
                                                                      batch_size=BATCH_SIZE,
                                                                      shuffle=False)
 
-        logits = VGG.VGG16(test_iamge_batch, N_CLASSES, IS_TRAIN)
+        logits = VGG.VGG16(test_iamge_batch, N_CLASSES, IS_PRETRAIN)
         correct = tools.num_correct_prediction(logits, test_label_batch)
         saver = tf.train.Saver(tf.global_variables())
 
