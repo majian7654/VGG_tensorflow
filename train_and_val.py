@@ -25,7 +25,7 @@ N_CLASSES = config.N_CLASSES
 BATCH_SIZE = config.BATCH_SIZE
 learning_rate = config.lr
 MAX_STEP = config.MAX_STEP
-IS_PRETRAIN = True
+IS_TRAIN = True
 
 
 def train():
@@ -46,7 +46,7 @@ def train():
                                                                    batch_size=BATCH_SIZE,
                                                                    shuffle=False)
 
-    logits = VGG.VGG16(train_image_batch, N_CLASSES, IS_PRETRAIN)
+    logits = VGG.VGG16(train_image_batch, N_CLASSES, IS_TRAIN)
     loss = tools.loss(logits, train_label_batch)
     accuracy = tools.accuracy(logits, train_label_batch)
     my_global_step = tf.Variable(0, trainable=False, name='global_step')
@@ -128,7 +128,7 @@ def evaluate():
                                                                      batch_size=BATCH_SIZE,
                                                                      shuffle=False)
 
-        logits = VGG.VGG16(test_iamge_batch, N_CLASSES, IS_PRETRAIN)
+        logits = VGG.VGG16(test_iamge_batch, N_CLASSES, IS_TRAIN)
         correct = tools.num_correct_prediction(logits, test_label_batch)
         saver = tf.train.Saver(tf.global_variables())
 

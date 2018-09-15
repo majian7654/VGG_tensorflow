@@ -6,7 +6,7 @@ import tensorflow as tf
 import numpy as np
 
 
-def conv(layer_name, x, out_channels, kernel_size=None, stride=None, is_pretrain=True):
+def conv(layer_name, x, out_channels, kernel_size=None, stride=None, is_train=True):
     """
     Convolution op wrapper, the Activation id ReLU
     :param layer_name: layer name, eg: conv1, conv2, ...
@@ -28,12 +28,12 @@ def conv(layer_name, x, out_channels, kernel_size=None, stride=None, is_pretrain
                             shape=[kernel_size[0], kernel_size[1], in_channels, out_channels],
                             dtype=tf.float32,
                             initializer=tf.contrib.layers.xavier_initializer(),
-                            trainable=is_pretrain)
+                            trainable=is_train)
         b = tf.get_variable(name='biases',
                             shape=[out_channels],
                             dtype=tf.float32,
                             initializer=tf.constant_initializer(0.0),
-                            trainable=is_pretrain)
+                            trainable=is_train)
         x = tf.nn.conv2d(x, w, stride, padding='SAME', name='conv')
         x = tf.nn.bias_add(x, b, name='bias_add')
         x = tf.nn.relu(x, name='relu')
@@ -62,25 +62,48 @@ def pool(layer_name, x, ksize=None, stride=None, is_max_pool=True):
     return x
 
 
-def batch_norm(x):
+def batch_norm(x, is_train):
     """
     Batch Normalization (offset and scale is none). BN algorithm can improve train speed heavily.
     :param x: input tensor
     :return: norm tensor
     """
+    mean_average = tf.get_variable(name="bn_mean",
+                        shape=[x.get_shape()(-1)],
+                        dtype=tf.float32,
+                        initializer=tf.constant_initializer(0.0),
+                        trainable=is_train)
+    var_average = tf.get_variable(name='bn_var',
+                        shape=[x.get_shape()(-1)],
+                        dtype=tf.float32,
+                        initializer=tf.constant_initializer(0.0),
+                        trainable=is_train)
+
+
     epsilon = 1e-3
-    batch_mean, batch_var = tf.nn.moments(x, [0])
-    x = tf.nn.batch_normalization(x,
-                                  mean=batch_mean,
-                                  variance=batch_var,
-                                  offset=None,
-                                  scale=None,
-                                  variance_epsilon=epsilon)
+    if is_train:
+        batch_mean, batch_var = tf.nn.moments(x, [0])
+        x = tf.nn.batch_normalization(x,
+                                      mean=batch_mean,
+                                      variance=batch_var,
+                                      offset=None,
+                                      scale=None,
+                                      variance_epsilon=epsilon)
+        mean_average = mean_average*0.9 + batch_mean*0.1
+        var_average = var_averge*0.9 + batch_var*0.1
+    else:
+         x = tf.nn.batch_normalization(x,
+                                      mean=mean_average,
+                                      variance=mean_average,
+                                      offset=None,
+                                      scale=None,
+                                      variance_epsilon=epsilon)
+       
 
     return x
 
 
-def FC_layer(layer_name, x, out_nodes):
+def FC_layer(layer_name, x, out_nodes, is_train):
     """
     Wrapper for fully-connected layer with ReLU activation function
     :param layer_name: FC layer name, eg: 'FC1', 'FC2', ...
