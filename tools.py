@@ -128,6 +128,7 @@ def FC_layer(layer_name, x, out_nodes, is_train):
         flat_x = tf.reshape(x, [-1, size])
 
         x = tf.nn.bias_add(tf.matmul(flat_x, w), b)
+        x = batch_norm(x, is_train)
         x = tf.nn.relu(x)
 
         return x
