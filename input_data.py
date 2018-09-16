@@ -102,7 +102,7 @@ def read_armyData(file_list, is_train, batch_size, shuffle):
     image = tf.image.decode_jpeg(image_contents,channels = 3)
    
    #need to focus, this is where to consider
-    image = tf.image.resize_image_with_crop_or_pad(image, img_height,img_width)
+    image = tf.image.resize_images(image, (img_height,img_width))
     image = tf.cast(image, tf.float32)
     image = tf.image.per_image_standardization(image)
     if shuffle:

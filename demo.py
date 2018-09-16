@@ -11,10 +11,10 @@ if __name__=='__main__':
     name_op = tf.placeholder(dtype = tf.string)
     image_contents = tf.read_file(name_op)
     image = tf.image.decode_jpeg(image_contents, channels = 3)
-    image = tf.image.resize_image_with_crop_or_pad(image, config.IMG_W, config.IMG_H)
+    image = tf.image.resize_images(image, (config.IMG_H, config.IMG_W))#need to focus
     image = tf.image.per_image_standardization(image)
     image = tf.cast(image, tf.float32)
-    image = tf.reshape(image,(-1,config.IMG_W, config.IMG_H,3))
+    image = tf.reshape(image,(-1,config.IMG_H, config.IMG_W,3))#need to focus
     logits_op = VGG.VGG16(image, config.N_CLASSES, True, False)
     prob_op = tf.nn.softmax(logits_op)
     #input image
