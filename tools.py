@@ -4,7 +4,7 @@ It include conv function, pool function, etc.
 """
 import tensorflow as tf
 import numpy as np
-
+from tensorflow.python.training.moving_averages import assign_moving_average
 
 def conv(layer_name, x, out_channels, kernel_size=None, stride=None, is_pretrain=True):
     """
