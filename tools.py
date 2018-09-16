@@ -82,8 +82,8 @@ def batch_norm(x, is_train):
                                       assign_moving_average(pop_var, batch_var, decay)]):
             return tf.identity(batch_mean), tf.identity(batch_var)
 
-    if is_training:
-        mean, variance = mean_and_var_update
+    if is_train:
+        mean, variance = mean_and_var_update()
     else:
         mean, variance = pop_mean, pop_var
 
