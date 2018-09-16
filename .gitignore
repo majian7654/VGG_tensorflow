@@ -1,5 +1,5 @@
 .DS_Store
 __pycache__/
 logs2/
-VGG16_pretrain/*
+VGG16_pretrain/*.npy
 dataset/*
