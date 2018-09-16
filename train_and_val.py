@@ -30,7 +30,7 @@ IS_PRETRAIN = True
 
 def train():
 
-    #pre_trained_weights = './VGG16_pretrain/vgg16.npy'
+    pre_trained_weights = './VGG16_pretrain/vgg16.npy'
     data_dir = config.dataPath
     train_log_dir = './logs2/train/'
     val_log_dir = './logs2/val/'
@@ -74,7 +74,7 @@ def train():
         init = tf.global_variables_initializer()
         sess.run(init)
         # load pretrain weights
-        #tools.load_with_skip(pre_trained_weights, sess, ['fc6', 'fc7', 'fc8'])
+        tools.load_with_skip(pre_trained_weights, sess, ['fc6', 'fc7', 'fc8'])
 
     coord = tf.train.Coordinator()
     threads = tf.train.start_queue_runners(sess=sess, coord=coord)

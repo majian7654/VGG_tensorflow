@@ -18,7 +18,7 @@ if __name__=='__main__':
     logits_op = VGG.VGG16(image, config.N_CLASSES, True, False)
     prob_op = tf.nn.softmax(logits_op)
     #input image
-    name = os.path.join(config.dataPath,'dog.jpg')
+    name = os.path.join('./testimg','dog.jpg')
     with tf.Session() as sess:
         ckpt = tf.train.get_checkpoint_state('./logs2/train/')
         if ckpt and ckpt.model_checkpoint_path:
