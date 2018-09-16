@@ -75,6 +75,7 @@ def train():
         sess.run(init)
         # load pretrain weights
         tools.load_with_skip(pre_trained_weights, sess, ['fc6', 'fc7', 'fc8'])
+        print('Load pre_trained_weights success!!!')
 
     coord = tf.train.Coordinator()
     threads = tf.train.start_queue_runners(sess=sess, coord=coord)
