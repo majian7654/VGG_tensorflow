@@ -68,6 +68,29 @@ def batch_norm(x, is_train):
     :param x: input tensor
     :return: norm tensor
     """
+    epsilon = 1e-8,
+    decay = 0.9
+
+    pop_mean = tf.Variable(tf.zeros([x.get_shape()[-1]]), trainable=False, name="pop-mean")  # [depth]
+    pop_var = tf.Variable(tf.ones([x.get_shape()[-1]]), trainable=False, name="pop-var")
+
+    def mean_and_var_update():
+        axes = list(range(len(x.get_shape()) - 1))
+        batch_mean, batch_var = tf.nn.moments(x, axes, name="moments")  # [depth]
+
+        with tf.control_dependencies([assign_moving_average(pop_mean, batch_mean, decay),
+                                      assign_moving_average(pop_var, batch_var, decay)]):
+            return tf.identity(batch_mean), tf.identity(batch_var)
+
+    if is_training:
+        mean, variance = mean_and_var_update
+    else:
+        mean, variance = pop_mean, pop_var
+
+    beta = tf.Variable(initial_value=tf.zeros(x.get_shape()[-1]), name="shift")
+    gamma = tf.Variable(initial_value=tf.ones(x.get_shape()[-1]), name="scale")
+    x = tf.nn.batch_normalization(x, mean, variance, beta, gamma, epsilon)
+    '''
     mean_average = tf.get_variable(name="bn_mean",
                         shape=[x.get_shape()[-1]],
                         dtype=tf.float32,
@@ -99,7 +122,7 @@ def batch_norm(x, is_train):
                                       scale=None,
                                       variance_epsilon=epsilon)
        
-
+    '''
     return x
 
 

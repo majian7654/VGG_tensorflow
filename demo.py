@@ -24,6 +24,8 @@ if __name__=='__main__':
         if ckpt and ckpt.model_checkpoint_path:
             saver = tf.train.Saver()
             saver.restore(sess,ckpt.model_checkpoint_path)
+            logits = sess.run(logitis_op, feed_dict={name_op:name})
+            print('logits:\n', logits)
             prob = sess.run(prob_op ,feed_dict = {name_op:name})[0,:]
             label, prob = np.argmax(prob), np.max(prob)
             print(label,prob)
