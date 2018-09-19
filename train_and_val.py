@@ -168,5 +168,5 @@ def evaluate():
                 coord.request_stop()
                 coord.join(threads)
 if __name__=='__main__':
-    train()
-    #evaluate()
+    #train()
+    evaluate()

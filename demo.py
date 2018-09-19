@@ -18,13 +18,13 @@ if __name__=='__main__':
     logits_op = VGG.VGG16(image, config.N_CLASSES, True, False)
     prob_op = tf.nn.softmax(logits_op)
     #input image
-    name = os.path.join('./testimg','dog.jpg')
+    name = os.path.join('./testImg','dog-1.jpg')
     with tf.Session() as sess:
         ckpt = tf.train.get_checkpoint_state('./logs2/train/')
         if ckpt and ckpt.model_checkpoint_path:
             saver = tf.train.Saver()
             saver.restore(sess,ckpt.model_checkpoint_path)
-            logits = sess.run(logitis_op, feed_dict={name_op:name})
+            logits = sess.run(logits_op, feed_dict={name_op:name})
             print('logits:\n', logits)
             prob = sess.run(prob_op ,feed_dict = {name_op:name})[0,:]
             label, prob = np.argmax(prob), np.max(prob)
