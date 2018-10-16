@@ -125,15 +125,15 @@ def read_armyData(file_list, is_train, batch_size, shuffle):
     return images, label_batch
 
 if __name__=='__main__':
-    #images, label_batch = read_cifar10('./dataset/cifar',True,32,True)
+    images_op, label_batch_op = read_cifar10('./dataset/cifar10_data',True,32,True)
+    sess = tf.Session()
+    coord = tf.train.Coordinator();
+    threads = tf.train.start_queue_runners(sess, coord = coord)
+    image,label_batch = sess.run([images_op,label_batch_op])
+    print(image)
+    #images, label_batch = read_armyData('./dataset/armydata/filelist.txt',True, batch_size = 32, shuffle = False)
     #sess = tf.Session()
     #coord = tf.train.Coordinator();
     #threads = tf.train.start_queue_runners(sess, coord = coord)
     #label_batch = sess.run(label_batch)
     #print(label_batch)
-    images, label_batch = read_armyData('./dataset/armydata/filelist.txt',True, batch_size = 32, shuffle = False)
-    sess = tf.Session()
-    coord = tf.train.Coordinator();
-    threads = tf.train.start_queue_runners(sess, coord = coord)
-    label_batch = sess.run(label_batch)
-    print(label_batch)

@@ -50,7 +50,10 @@ def train():
     loss = tools.loss(logits, train_label_batch)
     accuracy = tools.accuracy(logits, train_label_batch)
     my_global_step = tf.Variable(0, trainable=False, name='global_step')
-    train_op = tools.optimize(loss, learning_rate, my_global_step)
+    
+    update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
+    with tf.control_dependencies(update_ops):
+        train_op = tools.optimize(loss, learning_rate, my_global_step)
 
     x = tf.placeholder(dtype=tf.float32, shape=[BATCH_SIZE, IMG_H, IMG_W, 3])
     y_ = tf.placeholder(dtype=tf.int32, shape=[BATCH_SIZE, N_CLASSES])
@@ -168,5 +171,5 @@ def evaluate():
                 coord.request_stop()
                 coord.join(threads)
 if __name__=='__main__':
-    #train()
-    evaluate()
+    train()
+    #evaluate()
